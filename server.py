@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import execjs    
 import urllib.parse
+from common_utils import CommonUtils
 
 app = Flask(__name__)
 
@@ -10,7 +11,7 @@ def generate_request_params():
     url = data.get('url')
     user_agent = data.get('user_agent')
     query = urllib.parse.urlparse(url).query
-    xbogus = execjs.compile(open('./X-Bogus.js').read()).call('sign', query, user_agent)
+    xbogus = CommonUtils().get_xbogus(query,user_agent)
     new_url = url + "&X-Bogus=" + xbogus
     response_data = {
         "param": new_url,
